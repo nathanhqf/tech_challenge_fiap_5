@@ -1,0 +1,28 @@
+__pycache__/
+*.pyc
+.venv/
+*.egg-info/
+
+# Dados (não versionar CSV grandes)
+data/kaggle/*.csv
+data/processed/
+data/decisions.db
+data/policy_comparison.csv
+
+# MLflow
+mlflow.db
+mlruns/
+
+# Secrets
+.env
+
+# Testes
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+htmlcov/
+coverage.xml
+.coverage
+
+.ipynb_checkpoints/
+.DS_Store
