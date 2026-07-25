@@ -86,11 +86,20 @@ Os parâmetros e métricas da Etapa 3 são registrados no MLflow (seção 7.1 do
 mlflow ui --backend-store-uri sqlite:///mlflow.db   # http://localhost:5000
 ```
 
-## Arquitetura-alvo em Nuvem (Etapa 6)
+## Arquitetura-alvo em Nuvem — AWS (Etapa 6)
 
-Para colocar o projeto no ar, a **API FastAPI** rodaria em um serviço de contêiner gerenciado (ex.: **Azure Container Apps** / AWS App Runner / Cloud Run), atrás de um **API Gateway** (Azure API Management) para autenticação e *rate limiting*, escalando sob demanda — inclusive a zero réplica quando ocioso, eliminando custo em período de experimentação. Os **logs de decisão** (auditáveis) vão para *object storage* (Azure Blob / S3) e o dataset processado para um *data lake*.
+Para colocar o projeto no ar na **AWS**, a **API FastAPI** rodaria em um contêiner gerenciado no **AWS App Runner** (ou **Amazon ECS/Fargate**), atrás do **Amazon API Gateway** para autenticação e *rate limiting*, escalando sob demanda — inclusive a zero quando ocioso, o que elimina custo no período de experimentação. Os **logs de decisão** (auditáveis) e o dataset processado ficariam no **Amazon S3**, e os segredos/config no **AWS Secrets Manager**.
 
-O rastreamento de experimentos e o versionamento das políticas usam **Azure Machine Learning com MLflow** (tracking + Model Registry), e a observabilidade (latência, taxa de erro e queda de recompensa) fica em **Azure Monitor + Application Insights**, com alertas. O retreino roda em pipeline agendado, mas a **promoção de uma nova política exige aprovação humana** — não há promoção automática para produção.
+O rastreamento de experimentos e o versionamento das políticas usariam o **Amazon SageMaker** com **MLflow** (tracking + Model Registry). A observabilidade (latência, taxa de erro e queda de recompensa média) ficaria no **Amazon CloudWatch**, com alarmes. O retreino rodaria em pipeline agendado (SageMaker Pipelines / EventBridge), mas a **promoção de uma nova política exige aprovação humana** — não há promoção automática para produção.
+
+| Componente | Serviço AWS |
+|---|---|
+| API (contêiner) | AWS App Runner ou ECS/Fargate |
+| Gateway / autenticação | Amazon API Gateway |
+| Logs de decisão + dataset | Amazon S3 |
+| Tracking de experimentos (MLflow) | Amazon SageMaker |
+| Observabilidade / alarmes | Amazon CloudWatch |
+| Segredos e configuração | AWS Secrets Manager |
 
 ## Estrutura
 
