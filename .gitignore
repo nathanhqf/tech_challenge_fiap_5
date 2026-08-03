@@ -26,3 +26,8 @@ coverage.xml
 
 .ipynb_checkpoints/
 .DS_Store
+
+# Material de gravacao do video (local, nao versionar)
+docs/roteiro-video.md
+docs/roteiro-gravacao.md
+docs/comandos-demo.ps1
